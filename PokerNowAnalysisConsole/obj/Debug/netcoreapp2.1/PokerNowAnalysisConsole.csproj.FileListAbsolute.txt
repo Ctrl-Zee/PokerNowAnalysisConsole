@@ -1,0 +1,11 @@
+C:\Projects\PokerNowAnalysisConsole\PokerNowAnalysisConsole\bin\Debug\netcoreapp2.1\PokerNowAnalysisConsole.deps.json
+C:\Projects\PokerNowAnalysisConsole\PokerNowAnalysisConsole\bin\Debug\netcoreapp2.1\PokerNowAnalysisConsole.runtimeconfig.json
+C:\Projects\PokerNowAnalysisConsole\PokerNowAnalysisConsole\bin\Debug\netcoreapp2.1\PokerNowAnalysisConsole.runtimeconfig.dev.json
+C:\Projects\PokerNowAnalysisConsole\PokerNowAnalysisConsole\bin\Debug\netcoreapp2.1\PokerNowAnalysisConsole.dll
+C:\Projects\PokerNowAnalysisConsole\PokerNowAnalysisConsole\bin\Debug\netcoreapp2.1\PokerNowAnalysisConsole.pdb
+C:\Projects\PokerNowAnalysisConsole\PokerNowAnalysisConsole\obj\Debug\netcoreapp2.1\PokerNowAnalysisConsole.csprojAssemblyReference.cache
+C:\Projects\PokerNowAnalysisConsole\PokerNowAnalysisConsole\obj\Debug\netcoreapp2.1\PokerNowAnalysisConsole.csproj.CoreCompileInputs.cache
+C:\Projects\PokerNowAnalysisConsole\PokerNowAnalysisConsole\obj\Debug\netcoreapp2.1\PokerNowAnalysisConsole.AssemblyInfoInputs.cache
+C:\Projects\PokerNowAnalysisConsole\PokerNowAnalysisConsole\obj\Debug\netcoreapp2.1\PokerNowAnalysisConsole.AssemblyInfo.cs
+C:\Projects\PokerNowAnalysisConsole\PokerNowAnalysisConsole\obj\Debug\netcoreapp2.1\PokerNowAnalysisConsole.dll
+C:\Projects\PokerNowAnalysisConsole\PokerNowAnalysisConsole\obj\Debug\netcoreapp2.1\PokerNowAnalysisConsole.pdb
