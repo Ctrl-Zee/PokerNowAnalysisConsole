@@ -8,12 +8,16 @@ namespace PokerNowAnalysisConsole.Models
     {
         public string Name { get; set; }
 
-        public int CurrentStack { get; set; }
+        //public int CurrentStack { get; set; }
 
         public int StartingStack { get; set; }
 
-        public bool IsStanding { get; set; }
+        public int FinalStack { get; set; }
 
-        public int LastBet { get; set; }
+        public int HandsWon { get; set; }        
+
+        public int TimesBusted { get; set; }
+
+
     }
 }

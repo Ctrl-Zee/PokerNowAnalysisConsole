@@ -91,8 +91,8 @@ namespace PokerNowAnalysisConsole
                 theAction.Description = action;
                 theAction.Delta = 10;
                 theAction.Player = ParsePlayer(action);
-                UpdateStack(theAction.Player, theAction.Delta, hand.MinBet);
-                UpdatePot("PreFlop", 10, hand);
+                //UpdateStack(theAction.Player, theAction.Delta, hand.MinBet);
+                //UpdatePot("PreFlop", 10, hand);
             }
             else if (action.Contains("big blind"))
             {
@@ -100,8 +100,8 @@ namespace PokerNowAnalysisConsole
                 theAction.Description = action;
                 theAction.Delta = 20;
                 theAction.Player = ParsePlayer(action);
-                UpdateStack(theAction.Player, theAction.Delta, hand.MinBet);
-                UpdatePot("PreFlop", 20, hand);
+                //UpdateStack(theAction.Player, theAction.Delta, hand.MinBet);
+                //UpdatePot("PreFlop", 20, hand);
             }
             else if (action.Contains("folds"))
             {
@@ -116,7 +116,7 @@ namespace PokerNowAnalysisConsole
                 theAction.Description = action;
                 theAction.Delta = ParseAmount(action, ActionType.Call);
                 theAction.Player = ParsePlayer(action);
-                UpdateStack(theAction.Player, theAction.Delta, hand.MinBet);
+                //UpdateStack(theAction.Player, theAction.Delta, hand.MinBet);
             }
             else if (action.Contains("checks"))
             {
@@ -131,28 +131,28 @@ namespace PokerNowAnalysisConsole
                 theAction.Description = action;
                 theAction.Delta = ParseAmount(action, ActionType.Raise);
                 theAction.Player = ParsePlayer(action);
-                UpdateStack(theAction.Player, theAction.Delta, hand.MinBet);
+                //UpdateStack(theAction.Player, theAction.Delta, hand.MinBet);
             }
             else if (action.Contains("flop"))
             {
                 theAction.Type = ActionType.Flop;
                 theAction.Description = action;
                 theAction.Delta = 0;
-                ClearLastBets();
+                //ClearLastBets();
             }
             else if (action.Contains("turn"))
             {
                 theAction.Type = ActionType.Turn;
                 theAction.Description = action;
                 theAction.Delta = 0;
-                ClearLastBets();
+                //ClearLastBets();
             }
             else if (action.Contains("river"))
             {
                 theAction.Type = ActionType.River;
                 theAction.Description = action;
                 theAction.Delta = 0;
-                ClearLastBets();
+                //ClearLastBets();
             }
             else if (action.Contains("wins"))
             {
@@ -160,7 +160,8 @@ namespace PokerNowAnalysisConsole
                 theAction.Description = action;
                 theAction.Delta = ParseAmount(action, ActionType.Win);
                 theAction.Player = ParsePlayer(action);
-                UpdateStack(theAction.Player, theAction.Delta, hand.MinBet, true);
+                //UpdateStack(theAction.Player, theAction.Delta, hand.MinBet, true);
+                theAction.Player.HandsWon++;
             }
             else if (action.Contains("gained"))
             {
@@ -168,14 +169,14 @@ namespace PokerNowAnalysisConsole
                 theAction.Description = action;
                 theAction.Delta = ParseAmount(action, ActionType.Gained);
                 theAction.Player = ParsePlayer(action);
-                UpdateStack(theAction.Player, theAction.Delta, hand.MinBet, true);
+                theAction.Player.HandsWon++;
             }
             else if (action.Contains("ending hand"))
             {
                 theAction.Type = ActionType.EndHand;
                 theAction.Description = action;
                 theAction.Delta = 0;
-                ClearLastBets();
+                //ClearLastBets();
             }
             else if (action.Contains("starting hand"))
             {
@@ -193,8 +194,9 @@ namespace PokerNowAnalysisConsole
             {
                 theAction.Type = ActionType.PlayerQuit;
                 theAction.Description = action;
-                theAction.Delta = 0;
+                theAction.Delta = ParseAmount(action, ActionType.PlayerQuit);
                 theAction.Player = ParsePlayer(action);
+                PlayerQuits(theAction.Player, theAction.Delta);
             }
             else if (action.Contains("stand up"))
             {
@@ -228,7 +230,7 @@ namespace PokerNowAnalysisConsole
             {
                 amount = Int32.Parse(tokens[tokens.Length - 1]);
             }
-            else if (actionType == ActionType.CreateGame ||actionType == ActionType.AddPlayer)
+            else if (actionType == ActionType.CreateGame || actionType == ActionType.AddPlayer || actionType == ActionType.PlayerQuit)
             {
                 amount = Int32.Parse(tokens[tokens.Length - 1].Replace(".", ""));
             }
@@ -259,16 +261,21 @@ namespace PokerNowAnalysisConsole
 
         private void AddPlayer(string name, int startingStack)
         {
-            Player newPlayer = new Player()
-            {
-                Name = name,
-                StartingStack = startingStack,
-                CurrentStack = startingStack,
-                IsStanding = false,
-                LastBet = 0
-            };
+            // check if player exists
+            Player player = GetPlayer(name);
 
-            game.Players?.Add(newPlayer);
+            if (player == null)
+            {
+                Player newPlayer = new Player()
+                {
+                    Name = name,
+                    StartingStack = startingStack
+                };
+
+                game.Players?.Add(newPlayer);
+            }
+
+            
         }
 
         private Player GetPlayer(string name)
@@ -282,68 +289,71 @@ namespace PokerNowAnalysisConsole
             game.Players.Remove(player);
         }
 
-        private void UpdateStack(Player player, int delta, int minBet, bool win = false)
-        {            
-            int amount = 0;
-            //int modifier = 0;
-            //if (win)
-            //{
-            //    modifier = 1;
-            //}
-            //else
-            //{
-            //    modifier = -1;                
-            //}
-
-            if (win)
+        private void PlayerQuits(Player player, int delta)
+        {
+            if (delta > 0)
             {
-                amount = delta;
+                player.FinalStack = delta;
             }
             else
             {
-                if (player.LastBet < minBet && player.LastBet != 0)
-                {
-                    amount = (delta - player.LastBet) * -1;
-                }
-                else if (player.LastBet > 0)
-                {
-                    amount = (player.LastBet - delta) * -1;
-                }
-                else
-                {
-                    amount = delta * -1;
-                }
-            }            
-
-            player.LastBet = delta;
-            player.CurrentStack += amount;
+                player.TimesBusted++;
+            }
         }
 
-        private void UpdatePot(string stage, int value, Hand hand)
-        {
-            if (stage == "PreFlop")
-            {
-                hand.PreFlopPot += value;
-            }
-            else if (stage == "Flop")
-            {
-                hand.FlopPot += value;
-            }
-            else if (stage == "Turn")
-            {
-                hand.TurnPot += value;
-            }
-            else if (stage == "River")
-            {
-                hand.RiverPot += value;
-            }
+        //private void UpdateStack(Player player, int delta, int minBet, bool win = false)
+        //{            
+        //    int amount = 0;
 
-            hand.CurrentPot += value;
-        }
+        //    if (win)
+        //    {
+        //        amount = delta;
+        //    }
+        //    else
+        //    {
+        //        if (player.LastBet < minBet && player.LastBet != 0)
+        //        {
+        //            amount = (delta - player.LastBet) * -1;
+        //        }
+        //        else if (player.LastBet > 0)
+        //        {
+        //            amount = (player.LastBet - delta) * -1;
+        //        }
+        //        else
+        //        {
+        //            amount = delta * -1;
+        //        }
+        //    }            
 
-        private void ClearLastBets()
-        {
-            game.Players.ForEach(p => p.LastBet = 0);
-        }
+        //    player.LastBet = delta;
+        //    player.CurrentStack += amount;
+        //}
+
+        //private void UpdatePot(string stage, int value, Hand hand)
+        //{
+        //    if (stage == "PreFlop")
+        //    {
+        //        hand.PreFlopPot += value;
+        //    }
+        //    else if (stage == "Flop")
+        //    {
+        //        hand.FlopPot += value;
+        //    }
+        //    else if (stage == "Turn")
+        //    {
+        //        hand.TurnPot += value;
+        //    }
+        //    else if (stage == "River")
+        //    {
+        //        hand.RiverPot += value;
+        //    }
+
+        //    hand.CurrentPot += value;
+        //}
+
+        //private void ClearLastBets()
+        //{
+        //    game.Players.ForEach(p => p.LastBet = 0);
+        //}
     }
 }
