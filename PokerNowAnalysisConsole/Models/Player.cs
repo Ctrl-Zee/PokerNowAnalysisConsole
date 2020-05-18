@@ -12,6 +12,8 @@ namespace PokerNowAnalysisConsole.Models
 
         public int StartingStack { get; set; }
 
-        public bool isStanding { get; set; }
+        public bool IsStanding { get; set; }
+
+        public int LastBet { get; set; }
     }
 }

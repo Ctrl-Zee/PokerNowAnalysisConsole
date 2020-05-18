@@ -16,6 +16,18 @@ namespace PokerNowAnalysisConsole.Models
 
         public string River { get; set; }
 
+        public int PreFlopPot { get; set; }
+
+        public int FlopPot { get; set; }
+
+        public int TurnPot { get; set; }
+
+        public int RiverPot { get; set; }
+
+        public int CurrentPot { get; set; }
+
+        public int MinBet { get; set; }
+
         public string Winner { get; set; }
 
         public int  WinningAmount { get; set; }
@@ -24,9 +36,12 @@ namespace PokerNowAnalysisConsole.Models
 
         public List<Action> Actions { get; set; }
 
+        //public List<Player> PlayerBets { get; set; }
+
         public Hand()
         {
             Actions = new List<Action>();
+            MinBet = 20;
         }
     }
 }

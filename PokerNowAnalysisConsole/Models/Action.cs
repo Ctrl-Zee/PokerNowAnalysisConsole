@@ -12,7 +12,7 @@ namespace PokerNowAnalysisConsole.Models
 
         public int  Delta { get; set; }
 
-        public string Player { get; set; }
+        public Player Player { get; set; }
     }
 
     public enum ActionType
