@@ -162,6 +162,8 @@ namespace PokerNowAnalysisConsole
                 theAction.Player = ParsePlayer(action);
                 //UpdateStack(theAction.Player, theAction.Delta, hand.MinBet, true);
                 theAction.Player.HandsWon++;
+                CheckPotSize(theAction.Delta);
+                ParseWinningHand(action);
             }
             else if (action.Contains("gained"))
             {
@@ -170,6 +172,7 @@ namespace PokerNowAnalysisConsole
                 theAction.Delta = ParseAmount(action, ActionType.Gained);
                 theAction.Player = ParsePlayer(action);
                 theAction.Player.HandsWon++;
+                CheckPotSize(theAction.Delta);
             }
             else if (action.Contains("ending hand"))
             {
@@ -244,6 +247,14 @@ namespace PokerNowAnalysisConsole
             return amount;
         }
 
+        private void ParseWinningHand(string action)
+        {
+            int start = action.IndexOf("with") + 4;
+            int end = action.IndexOf(',');
+            string winningHand = action.Substring(start, end - start);
+            IncrementWinningHandType(winningHand);
+        }
+
         private Player ParsePlayer(string action)
         {
             int first = action.IndexOf('\"') + 1;
@@ -273,9 +284,7 @@ namespace PokerNowAnalysisConsole
                 };
 
                 game.Players?.Add(newPlayer);
-            }
-
-            
+            }            
         }
 
         private Player GetPlayer(string name)
@@ -299,6 +308,21 @@ namespace PokerNowAnalysisConsole
             {
                 player.TimesBusted++;
             }
+        }
+
+        private void CheckPotSize(int amount)
+        {
+            if (amount > game.BiggestPotWon)
+            {
+                game.BiggestPotWon = amount;
+            }
+        }
+
+        private void IncrementWinningHandType(string winningHand)
+        {
+
+            game.WinningHands.TryGetValue(winningHand, out var count);
+            game.WinningHands[winningHand] = count + 1;
         }
 
         //private void UpdateStack(Player player, int delta, int minBet, bool win = false)
