@@ -8,13 +8,19 @@ namespace PokerNowAnalysisConsole.Models
     {
         public List<Player> Players { get; set; }
         public Dictionary<int, Hand> Log { get; set; }
+        public Dictionary<string, int> WinningHands { get; set; }
         public int HandsPlayed { get; set; }
+        public int BiggestPotWon { get; set; }
+        public string BestWinningHand { get; set; }
+        
 
         public Game()
         {
             Players = new List<Player>();
             Log = new Dictionary<int, Hand>();
+            WinningHands = new Dictionary<string, int>();
             HandsPlayed = 0;
+            BiggestPotWon = 0;
         }
     }
 }
