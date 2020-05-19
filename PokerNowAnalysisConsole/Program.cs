@@ -7,9 +7,10 @@ namespace PokerNowAnalysisConsole
         static void Main(string[] args)
         {            
             string filePath = @"C:\pokernowlogs\Week5.txt";
-            LogParser parser = new LogParser();
+            LogParser parser = new LogParser();            
             parser.ParseLog(filePath);
-            Console.WriteLine(parser.game.HandsPlayed);
+            GameAnalyzer analyzer = new GameAnalyzer(parser.game);
+            analyzer.AnalyzeGame();
         }
     }
 }
