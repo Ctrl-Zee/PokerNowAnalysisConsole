@@ -10,6 +10,12 @@ namespace PokerNowAnalysisConsole.Models
 
         public int BigBlind { get; set; }
 
+        public bool IsFlop { get; set; }
+
+        public bool IsTurn { get; set; }
+
+        public bool IsRiver { get; set; }
+
         public string Flop { get; set; }
 
         public string Turn { get; set; }
@@ -36,11 +42,20 @@ namespace PokerNowAnalysisConsole.Models
 
         public List<Action> Actions { get; set; }
 
+        public List<string> FlopPlayers { get; set; }
+
+        public List<string> TurnPlayers { get; set; }
+
+        public List<string> RiverPlayers { get; set; }        
+
         //public List<Player> PlayerBets { get; set; }
 
         public Hand()
         {
             Actions = new List<Action>();
+            FlopPlayers = new List<string>();
+            TurnPlayers = new List<string>();
+            RiverPlayers = new List<string>();
             MinBet = 20;
         }
     }

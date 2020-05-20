@@ -18,6 +18,7 @@ namespace PokerNowAnalysisConsole
         {
             Console.WriteLine($"Total Hands Played: {GetHandsPlayed()}");
             Console.WriteLine($"Biggest Pot Won: {GetBiggestPotWon()}");
+            GetPlayerStats();
 
             Console.ReadLine();
         }
@@ -30,6 +31,22 @@ namespace PokerNowAnalysisConsole
         public int GetBiggestPotWon()
         {
             return _gameResults.BiggestPotWon;
+        }
+
+        public void GetPlayerStats()
+        {
+            foreach (var player in _gameResults.Players)
+            {
+                Console.WriteLine();
+                Console.WriteLine($"------------ {player.Name} ------------");
+                Console.WriteLine($"Final Stack: {player.FinalStack}");
+                Console.WriteLine($"Hands Won: {player.HandsWon}");
+                Console.WriteLine($"Hands Folded: {player.HandsFolded}");
+                Console.WriteLine($"Flops Seen: {player.FlopsSeen}");
+                Console.WriteLine($"Turns Seen: {player.TurnsSeen}");
+                Console.WriteLine($"Rivers Seen: {player.RiversSeen}");
+                
+            }
         }
     }
 }
