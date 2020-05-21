@@ -95,6 +95,7 @@ namespace PokerNowAnalysisConsole
                 theAction.Player = ParsePlayer(action);
                 AddPlayerToPhase(hand, theAction.Player);
                 theAction.Player.HandsFolded++;
+                theAction.Player.LastHandNumberPlayed = game.HandsPlayed + 1;
             }
             else if (action.Contains("calls"))
             {
@@ -103,6 +104,7 @@ namespace PokerNowAnalysisConsole
                 theAction.Delta = ParseAmount(action, ActionType.Call);
                 theAction.Player = ParsePlayer(action);
                 AddPlayerToPhase(hand, theAction.Player);
+                theAction.Player.LastHandNumberPlayed = game.HandsPlayed + 1;
             }
             else if (action.Contains("checks"))
             {
@@ -111,6 +113,7 @@ namespace PokerNowAnalysisConsole
                 theAction.Delta = 0;
                 theAction.Player = ParsePlayer(action);
                 AddPlayerToPhase(hand, theAction.Player);
+                theAction.Player.LastHandNumberPlayed = game.HandsPlayed + 1;
             }
             else if (action.Contains("raises"))
             {
@@ -119,6 +122,7 @@ namespace PokerNowAnalysisConsole
                 theAction.Delta = ParseAmount(action, ActionType.Raise);
                 theAction.Player = ParsePlayer(action);
                 AddPlayerToPhase(hand, theAction.Player);
+                theAction.Player.LastHandNumberPlayed = game.HandsPlayed + 1;
             }
             else if (action.Contains("flop"))
             {
@@ -151,6 +155,7 @@ namespace PokerNowAnalysisConsole
                 CheckPotSize(theAction.Delta);
                 ParseWinningHand(action);
                 AddPlayerToPhase(hand, theAction.Player);
+                theAction.Player.LastHandNumberPlayed = game.HandsPlayed + 1;
             }
             else if (action.Contains("gained"))
             {
@@ -161,6 +166,7 @@ namespace PokerNowAnalysisConsole
                 theAction.Player.HandsWon++;
                 CheckPotSize(theAction.Delta);
                 AddPlayerToPhase(hand, theAction.Player);
+                theAction.Player.LastHandNumberPlayed = game.HandsPlayed + 1;
             }
             else if (action.Contains("ending hand"))
             {
@@ -193,8 +199,9 @@ namespace PokerNowAnalysisConsole
             {
                 theAction.Type = ActionType.StandUp;
                 theAction.Description = action;
-                theAction.Delta = 0;
+                theAction.Delta = ParseAmount(action, ActionType.StandUp);
                 theAction.Player = ParsePlayer(action);
+                PlayerStands(theAction.Player, theAction.Delta);
             }
             else if (action.Contains("sit back"))
             {
@@ -220,7 +227,7 @@ namespace PokerNowAnalysisConsole
             {
                 amount = Int32.Parse(tokens[tokens.Length - 1]);
             }
-            else if (actionType == ActionType.CreateGame || actionType == ActionType.AddPlayer || actionType == ActionType.PlayerQuit)
+            else if (actionType == ActionType.CreateGame || actionType == ActionType.AddPlayer || actionType == ActionType.PlayerQuit || actionType == ActionType.StandUp)
             {
                 amount = Int32.Parse(tokens[tokens.Length - 1].Replace(".", ""));
             }
@@ -289,12 +296,26 @@ namespace PokerNowAnalysisConsole
         {
             if (delta > 0)
             {
-                player.FinalStack = delta;
+                player.QuitingStack = delta;
             }
             else
             {
                 player.TimesBusted++;
+                player.StandingStack = 0;
             }
+        }
+
+        private void PlayerStands(Player player, int delta)
+        {
+            if (delta > 0)
+            {
+                player.StandingStack = delta;
+            }
+        }
+
+        private void PlayerSits(Player player)
+        {
+            player.StandingStack = 0;
         }
 
         private void CheckPotSize(int amount)
@@ -309,7 +330,7 @@ namespace PokerNowAnalysisConsole
         {
             game.WinningHands.TryGetValue(winningHand, out var count);
             game.WinningHands[winningHand] = count + 1;
-        }        
+        }
 
         private void AddPlayerToPhase(Hand hand, Player player)
         {

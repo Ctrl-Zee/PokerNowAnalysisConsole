@@ -10,7 +10,9 @@ namespace PokerNowAnalysisConsole.Models
 
         public int StartingStack { get; set; }
 
-        public int FinalStack { get; set; }
+        public int QuitingStack { get; set; }
+
+        public int StandingStack { get; set; }
 
         public int HandsFolded { get; set; }
 
@@ -24,6 +26,6 @@ namespace PokerNowAnalysisConsole.Models
 
         public int TimesBusted { get; set; }
 
-
+        public int LastHandNumberPlayed { get; set; }
     }
 }

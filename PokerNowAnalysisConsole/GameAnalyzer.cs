@@ -39,13 +39,16 @@ namespace PokerNowAnalysisConsole
             {
                 Console.WriteLine();
                 Console.WriteLine($"------------ {player.Name} ------------");
-                Console.WriteLine($"Final Stack: {player.FinalStack}");
+                Console.WriteLine($"Quiting Stack: {player.QuitingStack}");
+                Console.WriteLine($"Standing Stack: {player.StandingStack}");
+                Console.WriteLine($"Hands Played: {player.LastHandNumberPlayed}");
                 Console.WriteLine($"Hands Won: {player.HandsWon}");
                 Console.WriteLine($"Hands Folded: {player.HandsFolded}");
                 Console.WriteLine($"Flops Seen: {player.FlopsSeen}");
                 Console.WriteLine($"Turns Seen: {player.TurnsSeen}");
                 Console.WriteLine($"Rivers Seen: {player.RiversSeen}");
-                
+                Console.WriteLine($"Times Busted: {player.TimesBusted}");
+
             }
         }
     }
