@@ -33,6 +33,7 @@ namespace PokerNowAnalysisConsole
             {
                 if (line.Contains("-- ending hand"))
                 {
+                    game.EndingTime = ParseHandTime(line);
                     game.HandsPlayed++;
                     game.Log.Add(game.HandsPlayed, hand);
                     hand = new Hand();
@@ -173,13 +174,7 @@ namespace PokerNowAnalysisConsole
                 theAction.Type = ActionType.EndHand;
                 theAction.Description = action;
                 theAction.Delta = 0;
-            }
-            else if (action.Contains("starting hand"))
-            {
-                theAction.Type = ActionType.StartHand;
-                theAction.Description = action;
-                theAction.Delta = 0;
-            }
+            }            
             else if (action.Contains("shows"))
             {
                 theAction.Type = ActionType.ShowHand;
@@ -209,6 +204,19 @@ namespace PokerNowAnalysisConsole
                 theAction.Description = action;
                 theAction.Delta = 0;
                 theAction.Player = ParsePlayer(action);
+            }
+            else if (action.Contains("starting hand #1 "))
+            {
+                theAction.Type = ActionType.GameStart;
+                theAction.Description = action;
+                theAction.Delta = 0;
+                game.StartingTime = ParseHandTime(action);
+            }
+            else if (action.Contains("starting hand"))
+            {
+                theAction.Type = ActionType.StartHand;
+                theAction.Description = action;
+                theAction.Delta = 0;
             }
             else
             {
@@ -262,6 +270,13 @@ namespace PokerNowAnalysisConsole
             int first = action.IndexOf('\"') + 1;
             int last = action.LastIndexOf('\"') - first;
             return action.Substring(first, last);
+        }
+
+        private string ParseHandTime(string action)
+        {
+            string[] tokens = action.Split(' ');
+            string handTime = tokens[0];
+            return handTime;
         }
 
         private void AddPlayer(string name, int startingStack)

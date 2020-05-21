@@ -12,7 +12,8 @@ namespace PokerNowAnalysisConsole.Models
         public int HandsPlayed { get; set; }
         public int BiggestPotWon { get; set; }
         public string BestWinningHand { get; set; }
-        
+        public string StartingTime { get; set; }
+        public string EndingTime { get; set; }
 
         public Game()
         {

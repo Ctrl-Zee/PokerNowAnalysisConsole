@@ -16,21 +16,13 @@ namespace PokerNowAnalysisConsole
 
         public void AnalyzeGame()
         {
-            Console.WriteLine($"Total Hands Played: {GetHandsPlayed()}");
-            Console.WriteLine($"Biggest Pot Won: {GetBiggestPotWon()}");
+            Console.WriteLine($"Total Hands Played: {_gameResults.HandsPlayed}");
+            Console.WriteLine($"Biggest Pot Won: {_gameResults.BiggestPotWon}");
+            Console.WriteLine($"Start Time: {_gameResults.StartingTime}");
+            Console.WriteLine($"Start Time: {_gameResults.EndingTime}");
             GetPlayerStats();
 
             Console.ReadLine();
-        }
-
-        public int GetHandsPlayed()
-        {
-            return _gameResults.HandsPlayed;
-        }
-
-        public int GetBiggestPotWon()
-        {
-            return _gameResults.BiggestPotWon;
         }
 
         public void GetPlayerStats()

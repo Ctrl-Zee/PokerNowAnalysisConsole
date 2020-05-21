@@ -35,6 +35,8 @@ namespace PokerNowAnalysisConsole.Models
         ShowHand,
         PlayerQuit,
         StandUp,
-        SitDown
+        SitDown,
+        GameStart,
+        HandEnding
     }
 }
